@@ -1,7 +1,5 @@
 library health_devices;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/all_enums.dart';
+export 'src/i_health_device.dart';
+export 'src/health_devices_manager.dart';
