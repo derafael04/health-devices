@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:test/constants.dart';
 import 'package:test/device_controller.dart';
 
 class DeviceScreen extends HookWidget {
@@ -50,12 +51,27 @@ class DeviceScreen extends HookWidget {
                   Card(
                     child: InkWell(
                       onTap: () async {
-                        await deviceController.selectUser(1, 1234);
-                        await deviceController.readWeight();
-                        await deviceController.readBia();
-                        await deviceController.readBf();
-                        await deviceController.readMass();
-                        deviceController.startBia();
+                        // await deviceController.deleteUser(10, 1234);
+                        await deviceController.createUser(
+                          consentCode: 1000,
+                          userData: UserData(
+                            activityLevel: ActivityLevel.VERY_ACTIVE,
+                            birthDay: 19,
+                            birthMonth: 1,
+                            birthYear: 1999,
+                            gender: Gender.M,
+                            heightInCm: 190,
+                            index: 2,
+                            nickname: 'Luan Cesar',
+                          ),
+                        );
+                        // var x = await deviceController.listUsers();
+                        // for(final a in x ?? []) {
+                        //   print(a.toString());
+                        // }
+                        // await deviceController.selectUser(1, 1234);
+
+                        // deviceController.startBia();
                       },
                       child: const Center(
                         child: Text('Button'),
@@ -64,7 +80,7 @@ class DeviceScreen extends HookWidget {
                   ),
                   Card(
                     child: InkWell(
-                      onTap: ()  {
+                      onTap: () {
                         deviceController.fetchData();
                       },
                       child: const Center(
@@ -72,12 +88,9 @@ class DeviceScreen extends HookWidget {
                       ),
                     ),
                   ),
-
                 ],
               ),
-              SizedBox(
-                height: 16
-              ),
+              SizedBox(height: 16),
               Text('Weight: ${deviceController.weight}'),
               Text('Bia: ${deviceController.bia}'),
               Text('Bf: ${deviceController.bf}'),
@@ -113,8 +126,6 @@ class DeviceScreen extends HookWidget {
               Text('Massa Tronco: ${deviceController.massData.value.massTronco}'),
               Text('Massa Perna Direita: ${deviceController.massData.value.massPernaDireita}'),
               Text('Massa Perna Esquerda: ${deviceController.massData.value.massPernaEsquerda}'),
-
-              
             ],
           ),
         ),

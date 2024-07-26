@@ -106,3 +106,9 @@ MassData parseMassData(Uint8List data) {
     massPernaEsquerda: massPernaEsquerda,
   );
 }
+
+void main() {
+  var x = 1234;
+  final data = ByteData(2)..setUint16(0, x, Endian.little);
+  print(data.buffer.asUint8List());
+}
