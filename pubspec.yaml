@@ -8,9 +8,11 @@ environment:
   flutter: '>=1.17.0'
 
 dependencies:
+  collection: ^1.18.0
   flutter:
     sdk: flutter
   flutter_blue_plus: ^1.32.11
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:

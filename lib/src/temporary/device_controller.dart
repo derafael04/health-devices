@@ -1,16 +1,13 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:health_devices/src/temporary/constants.dart';
+import 'package:health_devices/src/temporary/util.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:test/constants.dart';
-import 'package:test/util.dart';
 
 class DeviceController {
   DeviceController(this.device) : super() {

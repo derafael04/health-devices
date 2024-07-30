@@ -1,3 +1,5 @@
+import 'package:health_devices/src/services/bluetooth/ble_driver.dart';
+
 import 'i_health_device.dart';
 
 class HealthDevicesManager {
@@ -9,7 +11,7 @@ class HealthDevicesManager {
     return _instance;
   }
 
-  Stream<IHealthDevice> getBLEDevicesCloseBy() => throw UnimplementedError();
+  Stream<IHealthDevice> getBLEDevicesCloseBy() => BLEDriver.closeByDevices;
   Stream<IHealthDevice> getBluetoothDevicesCloseBy() => throw UnimplementedError();
   Stream<IHealthDevice> getANTPlusDevicesCloseBy() => throw UnimplementedError();
 }
