@@ -1,5 +1,4 @@
-import '../../all_enums.dart';
-import '../../i_health_device.dart';
+part of '../../i_health_devices.dart';
 
 class HeartRateMonitorCoospoHw807 extends IHealthDevice {
   HeartRateMonitorCoospoHw807({

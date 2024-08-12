@@ -403,17 +403,12 @@ class UserData {
   final int? heightInCm;
   final ActivityLevel? activityLevel;
 
-  @override
-  String toString() {
-    return 'UserData{birthYear: $birthYear, birthMonth: $birthMonth, birthDay: $birthDay, nickname: $nickname, gender: $gender, activityLevel: ${activityLevel?.index}}';
-  }
-
   static fromBytes(List<int> bytes) {
     Uint8List intArray = Uint8List.fromList(bytes);
     ByteData byteData = intArray.buffer.asByteData();
 
     //index, nickname, year, month, day, height, gender, activity level
-    int index = byteData.getUint8(1);
+    // int index = byteData.getUint8(1);
     String nickname = String.fromCharCodes([byteData.getUint8(2), byteData.getUint8(3), byteData.getUint8(4)]);
     int year = byteData.getUint16(5, Endian.little);
     int month = byteData.getUint8(7);

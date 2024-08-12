@@ -1,9 +1,0 @@
-// ignore_for_file: constant_identifier_names
-
-enum Sex { MALE, FEMALE, UNKNOWN }
-
-enum Brand { APPLE, SAMSUNG, GOOGLE, MICROSOFT, UNKNOWN, BEURER, COOSPO, POLAR, MY_BEAT, GARMIN, FITBIT, HUAWEI, XIAOMI, SONY }
-
-enum Model { BF_1000, HW807, HW706, VERITY_SENSE }
-
-enum ConnectionType { BLE, ANT_PLUS, USB, WIFI, NFC, IR, UNKNOWN, BLUETOOTH_CLASSIC }

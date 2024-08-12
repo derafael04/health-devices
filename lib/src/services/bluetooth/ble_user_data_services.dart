@@ -1,19 +1,34 @@
 import 'dart:typed_data';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:health_devices/src/services/bluetooth/ble_driver.dart';
-import 'package:health_devices/src/services/bluetooth/bluetooth_characteristics.dart';
-import 'package:health_devices/src/services/bluetooth/bluetooth_services.dart';
 
-class BleUserDataServices {
+import '../../common_enums.dart';
+import '../../byte_data_extension.dart';
+import '../../utils/utils.dart';
+import 'ble_driver.dart';
+import 'bluetooth_characteristics.dart';
+import 'bluetooth_services.dart';
+
+class BleUserDataService {
   static final Guid serviceGUID = SERVICE_USER_DATA;
   BLEDriver _driver;
 
-  BleUserDataServices({
+  BleUserDataService({
     required BLEDriver driver,
   }) : _driver = driver;
 
+  _validateUserIndex(int index) {
+    if (index < 0 || index > 9) throw Exception('User index must be between 0 and 9');
+  }
+
+  _validateConsentCode(int consentCode) {
+    if (consentCode >= 0 && consentCode <= 9999) throw Exception('Consent code must be between 0 and 9999');
+  }
+
   Future<void> selectUser(int userIndex, int consentCode) async {
+    _validateConsentCode(consentCode);
+    _validateUserIndex(userIndex);
+
     final consentCodeBytes = ByteData(2)..setUint16(0, consentCode, Endian.little);
     var data = Uint8List.fromList([0x02, userIndex, ...consentCodeBytes.buffer.asUint8List()]);
 
@@ -25,6 +40,9 @@ class BleUserDataServices {
   }
 
   Future<void> deleteUser(int userIndex, int consentCode) async {
+    _validateConsentCode(consentCode);
+    _validateUserIndex(userIndex);
+
     await selectUser(userIndex, consentCode);
     await _driver.writeToCharacteristic(
       serviceUuid: SERVICE_USER_DATA,
@@ -33,9 +51,11 @@ class BleUserDataServices {
     );
   }
 
-  Future<void> updateUser(int userIndex, int consentCode, List<int> userData) async {
-    await selectUser(userIndex, consentCode);
-    var data = Uint8List.fromList([0x01, ...userData]);
+  Future<void> saveCurrentDataAsNewUser(int consentCode) async {
+    _validateConsentCode(consentCode);
+
+    final consentCodeBytes = ByteDataUtils.fromInt(consentCode).reverse.suffix(2);
+    List<int> data = Uint8List.fromList([0x01, ...consentCodeBytes]);
     await _driver.writeToCharacteristic(
       serviceUuid: SERVICE_USER_DATA,
       characteristicUuid: CHARACTERISTIC_USER_CONTROL_POINT,
@@ -43,4 +63,38 @@ class BleUserDataServices {
     );
   }
 
+  Future<void> writeHeight(int heightInCm) async {
+    var heightBytes = ByteDataUtils.fromInt(heightInCm).reverse.suffix(2);
+    await _driver.writeToCharacteristic(
+      serviceUuid: SERVICE_USER_DATA,
+      characteristicUuid: CHARACTERISTIC_USER_HEIGHT,
+      data: heightBytes,
+    );
+  }
+
+  Future<void> writeUserGender(Gender gender) async {
+    final int genderByte = gender == Gender.MALE ? 0x00 : 0x01;
+    await _driver.writeToCharacteristic(
+      serviceUuid: SERVICE_USER_DATA,
+      characteristicUuid: CHARACTERISTIC_USER_GENDER,
+      data: [genderByte],
+    );
+  }
+
+  Future<void> incrementUserChangeCount() async {
+    await _driver.writeToCharacteristic(
+      serviceUuid: SERVICE_USER_DATA,
+      characteristicUuid: CHARACTERISTIC_CHANGE_INCREMENT,
+      data: [0x01, 0x00, 0x00, 0x00, 0x00],
+    );
+  }
+
+  Future<void> writeUserBirthDate(DateTime birthDate) async {
+    final birthDateBytes = getBirthDateBytes(birthDate);
+    await _driver.writeToCharacteristic(
+      serviceUuid: SERVICE_USER_DATA,
+      characteristicUuid: CHARACTERISTIC_USER_DATE_OF_BIRTH,
+      data: birthDateBytes.buffer.asUint8List(),
+    );
+  }
 }
