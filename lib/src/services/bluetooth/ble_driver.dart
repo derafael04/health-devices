@@ -39,6 +39,12 @@ class BLEDriver {
     _scanController.play();
   }
 
+  static final StreamSubscription<List<ScanResult>> _scanResultsSubscription = closeByDevices.listen((event) {
+    for (var element in event) {
+      _devices[element.device.remoteId.str] = element.device;
+    }
+  });
+
   static void pauseScan() {
     _scanController.pause();
   }
