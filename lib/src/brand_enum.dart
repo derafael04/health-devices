@@ -29,7 +29,7 @@ enum Brand {
         return Brand.MICROSOFT;
       case 'UNKNOWN':
         return Brand.UNKNOWN;
-      case 'BEURER':
+      case 'Beurer GmbH':
         return Brand.BEURER;
       case 'COOSPO':
         return Brand.COOSPO;
