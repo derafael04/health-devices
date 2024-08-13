@@ -37,16 +37,18 @@ class BLEDriver {
 
   static void startScan() {
     _scanController.play();
+    scanResultsSubscription = closeByDevices.listen((event) {
+      for (var element in event) {
+        _devices[element.device.remoteId.str] = element.device;
+      }
+    });
   }
 
-  static final StreamSubscription<List<ScanResult>> _scanResultsSubscription = closeByDevices.listen((event) {
-    for (var element in event) {
-      _devices[element.device.remoteId.str] = element.device;
-    }
-  });
+  static StreamSubscription<List<ScanResult>>? scanResultsSubscription;
 
   static void pauseScan() {
     _scanController.pause();
+    scanResultsSubscription?.cancel();
   }
 
   /// This is the pool of devices that were identified by the BLE driver

@@ -11,6 +11,10 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
     _bodyCompositionService = BleBodyCompositionService(driver: _bleDriver);
   }
 
+  static bool isDevice(ScanResult sr) {
+    return sr.device.advName == 'BF1000' && sr.advertisementData.serviceUuids.contains(SERVICE_BODY_COMPOSITION);
+  }
+
   @override
   Model get model => Model.BF_1000;
 

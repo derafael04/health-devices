@@ -18,6 +18,7 @@ import 'package:rxdart/rxdart.dart';
 import 'manufacturers/beurer/beurer_bia_data.dart';
 import 'services/bluetooth/ble_body_composition_service.dart';
 import 'services/bluetooth/ble_weight_scale_service.dart';
+import 'services/bluetooth/bluetooth_services.dart';
 
 part 'manufacturers/beurer/bia_scale_beurer_bf1000.dart';
 part 'manufacturers/coospo/heart_rate_monitor_coospo_hw_807.dart';

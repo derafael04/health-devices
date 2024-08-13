@@ -16,6 +16,11 @@ class HeartRateMonitorCoospoHw807 extends IHealthDevice {
 
   String macAddress;
 
+  static bool isDevice(ScanResult sr) {
+    // todo: find a way to guess this device, because name ain't enough
+    return false;
+  }
+
   HeartRateMonitorCoospoHw807Data getDataFromBroadcast(List<int> broadcast) => throw UnimplementedError();
 
   Future<void> connect() => throw UnimplementedError();
