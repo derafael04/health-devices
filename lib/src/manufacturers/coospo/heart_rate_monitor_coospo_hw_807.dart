@@ -16,6 +16,10 @@ class HeartRateMonitorCoospoHw807 extends IHealthDevice {
 
   String macAddress;
 
+  @override
+  //TODO: implement name
+  String get name => '';
+
   static bool isDevice(ScanResult sr) {
     // todo: find a way to guess this device, because name ain't enough
     return false;

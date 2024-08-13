@@ -25,6 +25,8 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
   Brand get brand => Brand.BEURER;
 
   final String _macAddress;
+  @override
+  String? get name => _bleDriver.bluetoothDevice.advName;
 
   String get macAddress => _macAddress;
 

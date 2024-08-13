@@ -1,4 +1,5 @@
 library health_devices;
+
 import 'package:health_devices/health_devices.dart';
 import 'package:health_devices/src/brand_enum.dart';
 import 'package:health_devices/src/model_enum.dart';
@@ -27,6 +28,7 @@ sealed class IHealthDevice {
   String get id;
   Brand? get brand;
   Model? get model;
+  String? get name;
 
   HealthDeviceIdentifier getIdentifier(ConnectionType c) => (
         id: id,
@@ -42,6 +44,7 @@ class UnknownHealthDevice extends IHealthDevice {
     this.brand,
     this.model,
     this.connectionType,
+    this.name,
   });
 
   ConnectionType? connectionType;
@@ -51,6 +54,8 @@ class UnknownHealthDevice extends IHealthDevice {
   final Brand? brand;
   @override
   final Model? model;
+  @override
+  String? name;
 
   HealthDeviceIdentifier? get identifier => connectionType == null ? null : getIdentifier(connectionType!);
 }
