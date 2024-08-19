@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!--
 This README describes the package. If you publish this package to pub.dev,
 this README's contents appear on the landing page for your package.
@@ -29,3 +30,7 @@ You can use this package to provide functionality to your app, such as detecting
 ## Additional information
 
 To integrate the devices, you usually need at least one device in hand to test it. So please proceed with caution.
+=======
+# health-devices
+health-devices Pacto Apps
+>>>>>>> 5952000ae8d52e2907bf00ae36028ea5fe972f98
