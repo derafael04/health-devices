@@ -1,5 +1,7 @@
 library health_devices;
 
+import 'dart:typed_data';
+
 import 'package:health_devices/health_devices.dart';
 import 'package:health_devices/src/brand_enum.dart';
 import 'package:health_devices/src/model_enum.dart';

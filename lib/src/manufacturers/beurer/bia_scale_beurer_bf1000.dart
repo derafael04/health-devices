@@ -12,7 +12,7 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
   }
 
   static bool isDevice(ScanResult sr) {
-    return sr.device.advName == 'BF1000' && sr.advertisementData.serviceUuids.contains(SERVICE_BODY_COMPOSITION);
+    return sr.device.advName == 'BF1000' && sr.advertisementData.serviceUuids.contains(SERVICE_WEIGHT_SCALE);
   }
 
   @override
@@ -53,20 +53,6 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
   late final BleWeightScaleService _weightScaleService;
   late final BleBodyCompositionService _bodyCompositionService;
 
-  Future<BeurerBodyFatData> _getBodyFatMeasurement() => _bleDriver
-      .readCharacteristic(
-        characteristicUuid: BF1000_CUSTOM_SERVICE,
-        serviceUuid: CHARACTERISTIC_BEURER_II,
-      )
-      .then((data) => BeurerBodyFatData.fromBytes(data));
-
-  Future<BeurerSkeletalMuscleMassData> _getSkeletalMuscleMassMeasurement() => _bleDriver
-      .readCharacteristic(
-        characteristicUuid: BF1000_CUSTOM_SERVICE,
-        serviceUuid: CHARACTERISTIC_BEURER_III,
-      )
-      .then((data) => BeurerSkeletalMuscleMassData.fromBytes(data));
-
   /// Starts the BIA (Bioelectrical Impedance Analysis) measurement on the Beurer BF1000 BIA scale.
   ///
   /// This method initiates the BIA measurement on the scale for the specified user index and consent code.
@@ -79,12 +65,58 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
   /// Returns:
   /// A [Future] that resolves to a [BeurerBiaData] object containing the measurement results.
   Future<BeurerBiaData> startBia(int userIndex, int consentCode) async {
+    StreamSubscription<List<int>>? weightScaleCharacteristicSubscription;
+    StreamSubscription<List<int>>? bodyCompositionCharacteristicSubscription;
+    StreamSubscription<List<int>>? bfCharacteristicSubscription;
+    StreamSubscription<List<int>>? massCharacteristicSubscription;
     try {
       await selectUser(userIndex, consentCode);
 
       var biaControlPointCharacteristic = await _bleDriver.getCharacteristic(
         serviceUuid: BF1000_CUSTOM_SERVICE,
         characteristicUuid: CHARACTERISTIC_TAKE_MEASUREMENT,
+      );
+
+      // TODO: Find a way to name make that strategy simpler, so that we can only get the data as a future from the driver (maybe a finish callback to end the future)
+      final List<int> weight = [];
+      final List<int> bia = [];
+      final List<int> bf = [];
+      final List<int> mass = [];
+
+      // Start listening to weight scale data
+      weightScaleCharacteristicSubscription = await _bleDriver.startListeningToCharacteristic(
+        serviceUuid: Guid("181D"),
+        characteristicUuid: Guid("2A9D"),
+        onData: (event) {
+          weight.addAll(event);
+        },
+      );
+
+      // Start listening to body composition data
+      bodyCompositionCharacteristicSubscription = await _bleDriver.startListeningToCharacteristic(
+        serviceUuid: Guid("181B"),
+        characteristicUuid: Guid("2A9C"),
+        onData: (event) {
+          bia.addAll(event);
+        },
+      );
+
+      // Start listening to bf data
+      bfCharacteristicSubscription = await _bleDriver.startListeningToCharacteristic(
+        serviceUuid: Guid("FFFF"),
+        characteristicUuid: Guid("0009"),
+        onData: (event) {
+          bf.addAll(event);
+        },
+      );
+
+      // Start listening to mass data
+      massCharacteristicSubscription = await _bleDriver.startListeningToCharacteristic(
+        serviceUuid: Guid("FFFF"),
+        characteristicUuid: Guid("000a"),
+        onData: (event) {
+          mass.addAll(event);
+        },
       );
 
       await biaControlPointCharacteristic.setNotifyValue(true);
@@ -100,10 +132,10 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
       bool wasBiaSuccessful = firstEvent.length == 1 && firstEvent.first == 0x01;
 
       if (wasBiaSuccessful == true) {
-        var weightScaleData = await _weightScaleService.getMeasurement();
-        var bodyCompositionData = await _bodyCompositionService.getMeasurement();
-        var bodyFatData = await _getBodyFatMeasurement();
-        var skeletalMuscleMassData = await _getSkeletalMuscleMassMeasurement();
+        var weightScaleData = WeightScaleMeasurement.fromBytes(Uint8List.fromList(weight));
+        var bodyCompositionData = BodyCompositionServiceData.fromBytes(Uint8List.fromList(bia));
+        var bodyFatData = BeurerBodyFatData.fromBytes(Uint8List.fromList(bf));
+        var skeletalMuscleMassData = BeurerSkeletalMuscleMassData.fromBytes(Uint8List.fromList(mass));
         return BeurerBiaData(
           bodyFatData: bodyFatData,
           skeletalMuscleMassData: skeletalMuscleMassData,
@@ -115,6 +147,11 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
       }
     } catch (e) {
       rethrow;
+    } finally {
+      weightScaleCharacteristicSubscription?.cancel();
+      bodyCompositionCharacteristicSubscription?.cancel();
+      bfCharacteristicSubscription?.cancel();
+      massCharacteristicSubscription?.cancel();
     }
   }
 

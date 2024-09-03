@@ -22,7 +22,7 @@ class BleUserDataService {
   }
 
   _validateConsentCode(int consentCode) {
-    if (consentCode >= 0 && consentCode <= 9999) throw Exception('Consent code must be between 0 and 9999');
+    if (consentCode < 0 || consentCode > 9999) throw Exception('Consent code must be between 0 and 9999');
   }
 
   Future<void> selectUser(int userIndex, int consentCode) async {
