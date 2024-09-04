@@ -11,7 +11,7 @@ class BleWeightScaleService {
     required BLEDriver driver,
   }) : _driver = driver;
 
-  BLEDriver _driver;
+  final BLEDriver _driver;
 
   static final serviceGUID = SERVICE_WEIGHT_SCALE;
   static final measurementCharacteristic = CHARACTERISTIC_WEIGHT_MEASUREMENT;

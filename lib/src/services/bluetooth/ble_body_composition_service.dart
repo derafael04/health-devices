@@ -12,7 +12,7 @@ class BleBodyCompositionService {
     required BLEDriver driver,
   }) : _driver = driver;
 
-  BLEDriver _driver;
+  final BLEDriver _driver;
 
   static final Guid serviceGUID = SERVICE_BODY_COMPOSITION;
   static final Guid measurementCharacteristic = CHARACTERISTIC_BODY_COMPOSITION_MEASUREMENT;

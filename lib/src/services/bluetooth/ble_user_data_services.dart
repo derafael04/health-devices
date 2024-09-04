@@ -11,7 +11,7 @@ import 'bluetooth_services.dart';
 
 class BleUserDataService {
   static final Guid serviceGUID = SERVICE_USER_DATA;
-  BLEDriver _driver;
+  final BLEDriver _driver;
 
   BleUserDataService({
     required BLEDriver driver,

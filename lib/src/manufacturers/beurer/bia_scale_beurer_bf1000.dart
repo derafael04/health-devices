@@ -7,8 +7,6 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
   })  : _macAddress = macAddress,
         _bleDriver = BLEDriver(macAddress: macAddress) {
     _userDataService = BleUserDataService(driver: _bleDriver);
-    _weightScaleService = BleWeightScaleService(driver: _bleDriver);
-    _bodyCompositionService = BleBodyCompositionService(driver: _bleDriver);
   }
 
   static bool isDevice(ScanResult sr) {
@@ -50,8 +48,6 @@ class BIAScaleBeurerBf1000 extends IHealthDevice {
 
   final BLEDriver _bleDriver;
   late final BleUserDataService _userDataService;
-  late final BleWeightScaleService _weightScaleService;
-  late final BleBodyCompositionService _bodyCompositionService;
 
   /// Starts the BIA (Bioelectrical Impedance Analysis) measurement on the Beurer BF1000 BIA scale.
   ///

@@ -11,7 +11,7 @@ dependencies:
   collection: ^1.18.0
   flutter:
     sdk: flutter
-  flutter_blue_plus: ^1.32.11
+  flutter_blue_plus: ^1.32.12
   rxdart: ^0.27.0
 
 dev_dependencies:

@@ -5,7 +5,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'ble_driver.dart';
 
 class BleDeviceInformationService {
-  BLEDriver _driver;
+  final BLEDriver _driver;
 
   BleDeviceInformationService({
     required BLEDriver driver,
