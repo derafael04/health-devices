@@ -14,7 +14,7 @@ extension ByteDataUtils on ByteData {
   }
 
   Uint8List suffix(int length) {
-    var list = buffer.asUint8List();
+    var list = this.buffer.asUint8List();
     var listLength = list.length;
     return list.sublist(listLength - length);
   }
