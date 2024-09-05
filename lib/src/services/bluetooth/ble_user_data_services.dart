@@ -11,14 +11,14 @@ import 'bluetooth_services.dart';
 
 class BleUserDataService {
   static final Guid serviceGUID = SERVICE_USER_DATA;
-  final BLEDriver _driver;
+  BLEDriver _driver;
 
   BleUserDataService({
     required BLEDriver driver,
   }) : _driver = driver;
 
   _validateUserIndex(int index) {
-    if (index < 0 || index > 9) throw Exception('User index must be between 0 and 9');
+    if (index < 1 || index > 10) throw Exception('User index must be between 1 and 10');
   }
 
   _validateConsentCode(int consentCode) {

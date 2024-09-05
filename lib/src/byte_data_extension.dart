@@ -14,7 +14,9 @@ extension ByteDataUtils on ByteData {
   }
 
   Uint8List suffix(int length) {
-    return buffer.asUint8List().sublist(length);
+    var list = buffer.asUint8List();
+    var listLength = list.length;
+    return list.sublist(listLength - length);
   }
 
   ByteData get reverse {
