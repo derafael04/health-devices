@@ -54,7 +54,7 @@ class BleUserDataService {
   Future<void> saveCurrentDataAsNewUser(int consentCode) async {
     _validateConsentCode(consentCode);
 
-    final consentCodeBytes = ByteDataUtils.fromInt(consentCode).reverse.suffix(2);
+    final consentCodeBytes = ByteDataUtils.fromInt(consentCode).suffix(2);
     List<int> data = Uint8List.fromList([0x01, ...consentCodeBytes]);
     await _driver.writeToCharacteristic(
       serviceUuid: SERVICE_USER_DATA,
